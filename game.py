@@ -160,6 +160,7 @@ class board:
             return True    
     return False
     
+    
   def make_diagonal (self, dd, c, count, c_range, nc_range, c_type, diag):
     if c_type == 'height':
       x = ((nc_range -1)*(1-dd)/2) + (count * dd)
@@ -208,6 +209,9 @@ def get_move (chip, board):
   return x
 '''
     
+    
+DO_INTRO = False
+ADD_COLOR = False    
 
 RED = '\x1b[0;37;41m'
 BLUE = '\x1b[0;37;44m'
@@ -216,8 +220,12 @@ WIN_NUM = 4
 
 #CHIP_LIST = [BLUE + 'X' + BLACK, RED + 'O' + BLACK]
 
-CHIP1 = BLUE + 'X' + BLACK
-CHIP2 = RED + 'O' + BLACK
+if ADD_COLOR == True:
+    CHIP1 = BLUE + 'X' + BLACK
+    CHIP2 = RED + 'O' + BLACK
+else:
+    CHIP1 = 'X'
+    CHIP2 = 'O'
 
 def HVHgame(board):
   player1 = Player. Player ('human',CHIP1)
@@ -244,18 +252,24 @@ def HVHgame(board):
 
 
 
-num_humans = ui. get_num_humans ()
-size = ui. get_board_size ()
+
+if DO_INTRO == True:
+    num_humans = ui. get_num_humans ()
+    size = ui. get_board_size ()
+else:
+    num_humans = 2
+    size = {'height': 6, 'width': 7}
+    print('starting game...')
+    
 b = board (size ['width'], size ['height'])
 b. display ()
 
 if num_humans == 2:
-  HVHgame (b)
+    HVHgame (b)
 elif num_humans == 1:
-  pass
+    pass
 elif num_humans == 0:
-  pass
-
+    pass
 
 
 
