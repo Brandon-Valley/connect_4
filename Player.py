@@ -5,6 +5,7 @@ except:
     hardware = 'pc'
 
 import ui
+import ai
 
 
 #player
@@ -16,7 +17,7 @@ class Player:
     def get_move (self, board):
       if self.player_type == 'human':
         return self.human_get_move(board)
-      else: #AI
+      elif self.player_type == 'ai':
         return self.ai_get_move(board)
     
     def human_get_move (self, board):
@@ -33,6 +34,7 @@ class Player:
         return x
 
     def ai_get_move(self, board):
-      pass
+        #maybe need to print some stuff???
+      return ai.get_move(board)
     
 

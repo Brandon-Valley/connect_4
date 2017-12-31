@@ -209,27 +209,13 @@ def get_move (chip, board):
   return x
 '''
     
-    
-DO_INTRO = False
-ADD_COLOR = False    
 
-RED = '\x1b[0;37;41m'
-BLUE = '\x1b[0;37;44m'
-BLACK = '\x1b[0;37;40m'
-WIN_NUM = 4
-
-#CHIP_LIST = [BLUE + 'X' + BLACK, RED + 'O' + BLACK]
-
-if ADD_COLOR == True:
-    CHIP1 = BLUE + 'X' + BLACK
-    CHIP2 = RED + 'O' + BLACK
-else:
-    CHIP1 = 'X'
-    CHIP2 = 'O'
-
-def HVHgame(board):
+def Hgame(board, num_humans):
   player1 = Player. Player ('human',CHIP1)
-  player2 = Player. Player ('human',CHIP2)
+  if num_humans == 2:
+      player2 = Player. Player ('human',CHIP2)
+  elif num_humans == 1:
+      player2 = Player. Player ('ai',CHIP2)
   
   moves = 0
   win = False
@@ -252,6 +238,22 @@ def HVHgame(board):
 
 
 
+DO_INTRO = True
+ADD_COLOR = False    
+
+RED = '\x1b[0;37;41m'
+BLUE = '\x1b[0;37;44m'
+BLACK = '\x1b[0;37;40m'
+WIN_NUM = 4
+
+#CHIP_LIST = [BLUE + 'X' + BLACK, RED + 'O' + BLACK]
+
+if ADD_COLOR == True:
+    CHIP1 = BLUE + 'X' + BLACK
+    CHIP2 = RED + 'O' + BLACK
+else:
+    CHIP1 = 'X'
+    CHIP2 = 'O'
 
 if DO_INTRO == True:
     num_humans = ui. get_num_humans ()
@@ -264,10 +266,8 @@ else:
 b = board (size ['width'], size ['height'])
 b. display ()
 
-if num_humans == 2:
-    HVHgame (b)
-elif num_humans == 1:
-    pass
+if num_humans in {1,2}:
+    Hgame (b, num_humans)
 elif num_humans == 0:
     pass
 
