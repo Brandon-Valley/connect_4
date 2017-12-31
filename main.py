@@ -1,6 +1,10 @@
+from numpy import random
+
 import game
 import ui
 import Board
+
+random.seed(1)
 
 DO_INTRO = True
 
@@ -25,5 +29,5 @@ elif num_humans == 1:
     game.hvai_game(b)
     
 elif num_humans == 0:
-    game.ai_train_session()
+    ai.train_session()
     

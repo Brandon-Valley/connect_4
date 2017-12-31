@@ -1,5 +1,7 @@
 from random import randint
+
 from logger import logger
+import Learn_bot
 
 
 def get_move(board):
@@ -13,3 +15,15 @@ def get_move(board):
     randPic = randint(0, len(pMoves))
     return pMoves[randPic]
         
+        
+
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    

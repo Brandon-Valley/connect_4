@@ -10,7 +10,7 @@ import ai
 
 #player
 class Player:
-    def __init__(self, player_type, chip):
+    def __init__(self, player_type, chip, learn_bot = None):
       self. chip= chip
       self. player_type = player_type
     

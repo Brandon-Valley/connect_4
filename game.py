@@ -18,10 +18,7 @@ else:
     CHIP1 = 'X'
     CHIP2 = 'O'
 
-def core_game(board, p1_type, p2_type, show_board = True):
-    player1 = Player. Player (p1_type, CHIP1)    
-    player2 = Player. Player (p2_type, CHIP2)
-    
+def core_game(board, player1, player2, show_board = True):
     moves = 0
     win = False
     
@@ -40,23 +37,22 @@ def core_game(board, p1_type, p2_type, show_board = True):
           board. display ()
       win = board. win_check (WIN_NUM)
       
-    return c_player.chip
+    return c_player
     
 def hvh_game(board):
-    player1_type = 'human'
-    player2_type = 'human'
-    winning_chip = core_game(board, player1_type, player2_type)    
-    print ('PLAYER '+ winning_chip +" WINS!!!")
+    player1 = Player. Player ('human', CHIP1)    
+    player2 = Player. Player ('human', CHIP2)
+    winner = core_game(board, player1, player2)    
+    print ('PLAYER '+ winner.chip +" WINS!!!")
 
 
 def hvai_game(board):
-    player1_type = 'human'
-    player2_type = 'ai'
-    winning_chip = core_game(board, player1_type, player2_type)    
-    print ('PLAYER '+ winning_chip +" WINS!!!")
+    player1 = Player. Player ('human', CHIP1)    
+    player2 = Player. Player ('ai', CHIP2)
+    winner = core_game(board, player1, player2)    
+    print ('PLAYER '+ winner.chip +" WINS!!!")
 
-
-def ai_train_session():
+def ai_train_session(board):
     if DO_INTRO == True:
         num_games = input('Input number of games: ')
         show_board = input('Show final board(s): ')
@@ -64,6 +60,20 @@ def ai_train_session():
         num_games = TEST_NUM_GAMES
         show_board = TEST_SHOW_BOARD
         
-    player1_type = 'ai'
-    player2_type = 'ai'  
+    #this will get existing weights later
+    if True:# no weights exist
+        #make the 2 first Learn_bots
+        synaptic_weights_1 = 2 * random.random((board.width, 1)) - 1
+        synaptic_weights_2 = 2 * random.random((board.width, 1)) - 1
+        
+        lb1 = Learn_bot.Learn_bot(board, synaptic_weights_1)
+        lb2 = Learn_bot.Learn_bot(board, synaptic_weights_2)
+        
+        p1 = Player.Player(board, 'ai', CHIP1, lb1)
+        p2 = Player.Player(board, 'ai', CHIP2, lb2)
+        
+        
+    else:
+        #get weights
+        pass
         
