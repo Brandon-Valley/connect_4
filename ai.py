@@ -1,4 +1,6 @@
 from random import randint
+from logger import logger
+
 
 def get_move(board):
     #make list of possable moves
