@@ -18,7 +18,7 @@ else:
     CHIP1 = 'X'
     CHIP2 = 'O'
 
-def game(board, p1_type, p2_type, show_board = True):
+def core_game(board, p1_type, p2_type, show_board = True):
     player1 = Player. Player (p1_type, CHIP1)    
     player2 = Player. Player (p2_type, CHIP2)
     
@@ -42,7 +42,28 @@ def game(board, p1_type, p2_type, show_board = True):
       
     return c_player.chip
     
+def hvh_game(board):
+    player1_type = 'human'
+    player2_type = 'human'
+    winning_chip = core_game(board, player1_type, player2_type)    
+    print ('PLAYER '+ winning_chip +" WINS!!!")
 
 
+def hvai_game(board):
+    player1_type = 'human'
+    player2_type = 'ai'
+    winning_chip = core_game(board, player1_type, player2_type)    
+    print ('PLAYER '+ winning_chip +" WINS!!!")
 
 
+def ai_train_session():
+    if DO_INTRO == True:
+        num_games = input('Input number of games: ')
+        show_board = input('Show final board(s): ')
+    else:
+        num_games = TEST_NUM_GAMES
+        show_board = TEST_SHOW_BOARD
+        
+    player1_type = 'ai'
+    player2_type = 'ai'  
+        
