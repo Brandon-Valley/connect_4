@@ -2,11 +2,19 @@
 from numpy import exp, array, random, dot
 import random
 
+import ai_funcs #Only for testing !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 class Learn_bot:
-    def __init__(self, board, prev_weights):
+    def __init__(self, prev_weights):
+        self.synaptic_weights = prev_weights
         pass
         
+    def get_move(self, board, self_chip):
+        return ai_funcs.get_rand_move(board)
+
+def translate_board(board):
+    pass
         
         
         

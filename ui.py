@@ -31,15 +31,7 @@ def ask_if_standard_board():
     if hardware == 'phone':
         return(phoneFuncs.ask_if_standard_board())
     
-    while(1):
-        choice = input('Standard Board? (7x6) (y/n): ')
-        
-        if choice == 'y':
-            return True
-        elif choice =='n':
-            return False
-        else:
-            print('ERROR WRONG INPUT TRY AGAIN')
+    return get_tf('Standard Board? (7x6) (y/n): ')
         
         
 def get_int(prompt, dialog_box = False):
@@ -48,6 +40,17 @@ def get_int(prompt, dialog_box = False):
 
     return int(input(prompt))
 
+
+def get_tf(prompt):
+    while(1):
+        choice = input(prompt)
+        
+        if choice == 'y':
+            return True
+        elif choice =='n':
+            return False
+        else:
+            print('ERROR WRONG INPUT TRY AGAIN')
 
 
 
