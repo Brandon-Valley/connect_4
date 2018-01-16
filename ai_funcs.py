@@ -14,7 +14,7 @@ NUM_TIES_BEFORE_MUTATION = 2#change back to something like 100!!!!!!!!!!!!!!!!!!
 full_path = os.path.realpath(__file__)
 weights_path =  os.path.dirname(full_path) + '\\synaptic_weights.csv'
 
-
+#not really random
 def get_rand_move(board):
     #make list of possable moves
     pMoves = []
@@ -66,7 +66,6 @@ def train_session(board_size, num_games, show_final_board):
                 p1_wins += 1
                 p2_wins += 1
             else:
-                print('win!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 #find who won/add to their wins
                 if winning_player.chip == p1.chip:
                     p1_wins += 1
@@ -99,8 +98,6 @@ def train_session(board_size, num_games, show_final_board):
     for weight in p1.bot.synaptic_weights:
         log_dict[len(log_dict)] = weight[0]
         
-    print('these weights should match logDict:', p1.bot.synaptic_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    print('log_dict:', log_dict)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     logger.logSingle(log_dict, weights_path)
     
     print('Synaptic weights have been logged!')
@@ -114,8 +111,6 @@ def get_synaptic_weights(board_size):
         for w_num in range(board_size['width']):
             weight = [float(old_weights_dl[0][str(w_num)])]
             synaptic_weights.append(weight)
-        print(synaptic_weight)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        print('in ai.train_session: heres that thing you wanted to print and need to add documentation to logger:', old_weights_dl)#!!!!!!!!!!
     
     except: # very first train session / no weights read
         synaptic_weights = 2 * random.random((board_size['width'], 1)) - 1
