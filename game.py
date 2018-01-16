@@ -1,5 +1,7 @@
 import Player
 import Board
+import ai_funcs
+import Learn_bot
 
 ADD_COLOR = False    
 TEST_NUM_GAMES = 1
@@ -58,11 +60,17 @@ def hvh_game(board):
     print ('PLAYER '+ winner.chip +" WINS!!!")
 
 
-def hvai_game(board):
-    player1 = Player. Player ('human', CHIP1)    
-    player2 = Player. Player ('ai_funcs', CHIP2)
+def hvai_game(board, size):
+    player1 = Player. Player ('human', CHIP1)  
+    
+    synaptic_weights = ai_funcs.get_synaptic_weights(size)
+    lb = Learn_bot.Learn_bot(synaptic_weights)
+    player2 = Player.Player('ai', CHIP2, lb)
+    
     winner = core_game(board, player1, player2)    
     print ('PLAYER '+ winner.chip +" WINS!!!")
+    
+
 
 
     

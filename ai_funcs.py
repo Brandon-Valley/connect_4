@@ -33,20 +33,8 @@ def mutate(old_weights):
         
 def train_session(board_size, num_games, show_final_board):
     #get first weights
-    try:#if old weights exist
-        old_weights_dl = logger.readCSV(weights_path)
-        synaptic_weights_1 = []
-        for w_num in range(board_size['width']):
-            weight = [float(old_weights_dl[0][str(w_num)])]
-            synaptic_weights_1.append(weight)
-        print(synaptic_weights_1)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        print('in ai.train_session: heres that thing you wanted to print and need to add documentation to logger:', old_weights_dl)#!!!!!!!!!!
-        
-        synaptic_weights_2 = mutate(synaptic_weights_1)
-    
-    except: # very first train session / no weights read
-        synaptic_weights_1 = 2 * random.random((board_size['width'], 1)) - 1
-        synaptic_weights_2 = 2 * random.random((board_size['width'], 1)) - 1
+    synaptic_weights_1 = get_synaptic_weights(board_size)
+    synaptic_weights_2 = mutate(synaptic_weights_1)
     
     #make 1st 2 learnbots
     lb1 = Learn_bot.Learn_bot(synaptic_weights_1)
@@ -111,7 +99,6 @@ def train_session(board_size, num_games, show_final_board):
     for weight in p1.bot.synaptic_weights:
         log_dict[len(log_dict)] = weight[0]
         
-    
     print('these weights should match logDict:', p1.bot.synaptic_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     print('log_dict:', log_dict)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     logger.logSingle(log_dict, weights_path)
@@ -120,7 +107,20 @@ def train_session(board_size, num_games, show_final_board):
                
 
         
+def get_synaptic_weights(board_size):
+    try:#if old weights exist
+        old_weights_dl = logger.readCSV(weights_path)
+        synaptic_weights = []
+        for w_num in range(board_size['width']):
+            weight = [float(old_weights_dl[0][str(w_num)])]
+            synaptic_weights.append(weight)
+        print(synaptic_weight)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        print('in ai.train_session: heres that thing you wanted to print and need to add documentation to logger:', old_weights_dl)#!!!!!!!!!!
     
+    except: # very first train session / no weights read
+        synaptic_weights = 2 * random.random((board_size['width'], 1)) - 1
+    return  synaptic_weights
+
     
     
     

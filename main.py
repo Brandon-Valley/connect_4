@@ -7,7 +7,7 @@ import ai_funcs
 
 random.seed(1)
 
-DO_INTRO = False
+DO_INTRO = True
 
 
 if DO_INTRO == True:
@@ -27,7 +27,7 @@ if num_humans == 2:
 elif num_humans == 1:
     b = Board.Board (size ['width'], size ['height'])
     b. display ()
-    game.hvai_game(b)
+    game.hvai_game(b, size)
     
 elif num_humans == 0:
     if DO_INTRO == True:
