@@ -12,8 +12,10 @@ class Board:
       self.chips. append ([])
       
       
-  def display (self):
-    print ('\n' * 11)
+  def display (self, print_spaces = True):
+    if print_spaces == True:
+        print ('\n' * 11)
+    
     numbers = ''
     for x in range (self. width):
       numbers +=(' ' + str(x + 1))
@@ -108,7 +110,6 @@ class Board:
             #print ('set count:', count)
             diagonal = []          
 
-           
             if dd == 0:
               if c_type == 'height':
                 x = count #((nc_range -1)*(1-dd)/2) + (count * dd)
@@ -120,18 +121,6 @@ class Board:
               chip = self.get_chip (int(x), int(y))
               diag. append (chip)
               count += 1
-            
-            '''
-            if dd == 1:
-              while ((count + c) < c_range) and (count <= nc_range):
-                self.make_diagonal (dd, c, count, c_range, nc_range, c_type, diagonal)
-            elif dd == -1 and c_type == 'width':
-              while (count <= nc_range) and c - count>=0:
-                self.make_diagonal (dd, c, count, c_range, nc_range, c_type, diagonal)
-            elif dd == -1 and c_type == 'height':
-              while c >= win_num and c_range - c + count <= c_range and count <= nc_range:
-                self.make_diagonal (dd, c, count, c_range, nc_range, c_type, diagonal)
-            '''
         
             if False:#fix!!!!!!!!!!!!!!!!!!!
               pass

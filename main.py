@@ -18,128 +18,14 @@ else:
     size = {'height': 6, 'width': 7}
     print('starting game...')
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-b = Board.Board (size ['width'], size ['height'])
 
 if num_humans == 2:
+    b = Board.Board (size ['width'], size ['height'])
     b. display ()
     game.hvh_game(b)
     
 elif num_humans == 1:
+    b = Board.Board (size ['width'], size ['height'])
     b. display ()
     game.hvai_game(b)
     
@@ -149,7 +35,7 @@ elif num_humans == 0:
         show_the_board = ui.get_tf('Show final board(s) (y/n): ')
     else:
         number_of_games = 10
-        show_the_board = False
+        show_the_board = True
     
-    ai_funcs.train_session(b, number_of_games, show_the_board)
+    ai_funcs.train_session(size, number_of_games, show_the_board)
     

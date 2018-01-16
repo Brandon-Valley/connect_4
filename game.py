@@ -22,32 +22,34 @@ def core_game(board, player1, player2, show_board = True):
     moves = 0
     win = False
     
+    tie_found = False
     #main game loop
     while (win == False):
         if (moves % 2 == 0):
-          c_player = player1
+            c_player = player1
         else:
-          c_player = player2
+            c_player = player2
+          
+        #check for tie
+        tie_found = True
+        for col in board.chips:
+            if tie_found == True:
+                if len(col) < board.height:
+                    tie_found = False
+        if tie_found == True:
+            print('tie')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return False
         
         x = c_player. get_move(board)
         board. play (c_player.chip, x)
         
         moves += 1
         if show_board == True:
-            board. display ()
-        win = board. win_check (WIN_NUM)
-        
-        #check for tie
-        tie_found = True
-        for col in board.chips:
-            if len(col) < board.height:
-                tie_found = False
-                break
-        if tie_found == True:
-            print('tie')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            return False
-        
+            board.display()
+        win = board.win_check(WIN_NUM)
+
     return c_player
+    
     
 def hvh_game(board):
     player1 = Player. Player ('human', CHIP1)    

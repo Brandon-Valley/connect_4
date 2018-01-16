@@ -6,12 +6,13 @@ from logger import logger
 import Learn_bot
 import game
 import Player
+import Board
 
 
 NUM_TIES_BEFORE_MUTATION = 2#change back to something like 100!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 full_path = os.path.realpath(__file__)
-weights_path =  os.path.dirname(full_path) + 'synaptic_weights\\.csv'
+weights_path =  os.path.dirname(full_path) + '\\synaptic_weights.csv'
 
 
 def get_rand_move(board):
@@ -27,18 +28,25 @@ def get_rand_move(board):
 
 
 def mutate(old_weights):
-    pass
+    return old_weights
       
         
-def train_session(board, num_games, show_board):
+def train_session(board_size, num_games, show_final_board):
     #get first weights
     try:#if old weights exist
         old_weights_dl = logger.readCSV(weights_path)
-        print('in ai.train_session: heres that thing you wanted to print and need to add documentation to logger:', old_weights_dl)
+        synaptic_weights_1 = []
+        for w_num in range(board_size['width']):
+            weight = [float(old_weights_dl[0][str(w_num)])]
+            synaptic_weights_1.append(weight)
+        print(synaptic_weights_1)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        print('in ai.train_session: heres that thing you wanted to print and need to add documentation to logger:', old_weights_dl)#!!!!!!!!!!
+        
+        synaptic_weights_2 = mutate(synaptic_weights_1)
     
     except: # very first train session / no weights read
-        synaptic_weights_1 = 2 * random.random((board.width, 1)) - 1
-        synaptic_weights_2 = 2 * random.random((board.width, 1)) - 1
+        synaptic_weights_1 = 2 * random.random((board_size['width'], 1)) - 1
+        synaptic_weights_2 = 2 * random.random((board_size['width'], 1)) - 1
     
     #make 1st 2 learnbots
     lb1 = Learn_bot.Learn_bot(synaptic_weights_1)
@@ -55,18 +63,23 @@ def train_session(board, num_games, show_board):
         count = 0
         
         while( ( abs(p1_wins - p2_wins) < 2 ) and (p1_wins - 1) < NUM_TIES_BEFORE_MUTATION):
+            new_board = Board.Board (board_size ['width'], board_size ['height'])
             #swap who goes first
             if count % 2 == 0:
-                winning_player = game.core_game(board, p1, p2, False)
+                winning_player = game.core_game(new_board, p1, p2, False)
             else:
-                winning_player = game.core_game(board, p2, p1, False)
+                winning_player = game.core_game(new_board, p2, p1, False)
+                
+            if show_final_board == True:
+                new_board.display(False)
             
             #in case of tie
             if winning_player == False:
                 p1_wins += 1
                 p2_wins += 1
             else:
-                #find who won/add to thier wins
+                print('win!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                #find who won/add to their wins
                 if winning_player.chip == p1.chip:
                     p1_wins += 1
                 elif winning_player.chip == p2.chip:
@@ -74,6 +87,8 @@ def train_session(board, num_games, show_board):
                 else:
                     print('should make a propper error here, error in ai_train_game, invalid winner chip')#!!!!!!!!!!!!!!!
             count += 1
+            games_played += 1
+            
         
         #if tie, default to player 1 as the winner
         if winning_player == False:
@@ -94,8 +109,11 @@ def train_session(board, num_games, show_board):
     
     log_dict = {}
     for weight in p1.bot.synaptic_weights:
-        log_dict[len(log_dict)] = weight
-
+        log_dict[len(log_dict)] = weight[0]
+        
+    
+    print('these weights should match logDict:', p1.bot.synaptic_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    print('log_dict:', log_dict)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     logger.logSingle(log_dict, weights_path)
     
     print('Synaptic weights have been logged!')

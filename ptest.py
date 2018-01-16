@@ -1,0 +1,5 @@
+print('XXXXX')
+print('|||||')
+print('|||||')
+print('|||||')
+print('IIIII')
