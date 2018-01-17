@@ -7,7 +7,7 @@ import ai_funcs
 
 random.seed(1)
 
-DO_INTRO = False
+DO_INTRO = True
 
 
 if DO_INTRO == True:
@@ -31,7 +31,7 @@ elif num_humans == 1:
     
 elif num_humans == 0:
     if DO_INTRO == True:
-        number_of_games = input('Input number of games: ')
+        number_of_games = ui.get_int('Input number of games: ')
         show_the_board = ui.get_tf('Show final board(s) (y/n): ')
     else:
         number_of_games = 10

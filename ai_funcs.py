@@ -93,28 +93,96 @@ def train_session(board_size, num_games, show_final_board):
         
     #say training is done and log the winning weights (player 1 = winner)
     print('Training done!')
-    
-    log_dict = {}
-    for weight in p1.bot.synaptic_weights:
-        log_dict[len(log_dict)] = weight[0]
-        
-    logger.logSingle(log_dict, weights_path)
-    
+    log_weights(p1.bot.synaptic_weights)
     print('Synaptic weights have been logged!')
                
 
-        
+def log_weights(new_weights):
+    new_weights_dict = {}
+    need_overwrite = False
+    
+    #format newest weights
+    for weight in new_weights:
+        new_weights_dict[len(new_weights_dict)] = weight[0]
+    
+    try:#if csv already exists
+        old_weights_dl = logger.readCSV(weights_path)
+ 
+        #if the training session that was just preformed was on a board that yeilded more weights than any previous training session
+        if len(new_weights) > len(old_weights_dl[0]):
+            need_overwrite = True #if number of fieldnames changes, need to wverwrite csv
+            log_dl = []
+            #add Nones to all existing rows
+            for row_dict in old_weights_dl:
+                while(len(row_dict) < len(new_weights)):
+                    row_dict[len(row_dict)] = None
+                log_dl.append(row_dict)
+                
+        #add Nones to newest weights if needed
+        while(len(new_weights_dict) < len(old_weights_dl[0])):
+            new_weights_dict[len(new_weights_dict)] = None
+    except:
+        pass
+ 
+    if need_overwrite == True:    
+        print('overwriting old csv!!!!!!!!!!!!!!!!!!!!!!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+        log_dl.append(new_weight_dict)
+        logger.logList(log_dl, weights_path, False)
+    else:
+        print('logging single!!!!!!!!!!!!!!!!!!')
+        logger.logSingle(new_weights_dict, weights_path)
+
+
+#each row of the synaptic weights csv represents a set of weights for a board single board size
 def get_synaptic_weights(board_size):
-    try:#if old weights exist
+    num_digits_for_possable_moves = ( len( bin(board_size['width']) ) - 2 )# number of digits needed to express number of possable moves in binary
+    num_chip_spaces = ( board_size['width'] * board_size['height'] ) #number of places a chip can be put on the board
+    num_weights = ( num_chip_spaces * 2 ) + num_digits_for_possable_moves
+    print('num_weights:', num_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    try:#if any old weights exist
         old_weights_dl = logger.readCSV(weights_path)
         synaptic_weights = []
-        for w_num in range(board_size['width']):
-            weight = [float(old_weights_dl[0][str(w_num)])]
-            synaptic_weights.append(weight)
-    
+        weights_found = False
+        
+        #check to see if you have existing weights for a board this size
+        for board_weights in old_weights_dl:
+            #if have existing weights for a board of this size 
+            if len(board_weights) == num_weights:
+                for w_num in range(num_weights):
+                    weight = [float(board_weights[str(w_num)])]
+                    if weight != None:
+                        synaptic_weights.append(weight)
+                weights_found = True
+                break
+        #if no weights found for board size, generate random weights
+        if weights_found == False:
+            synaptic_weights = 2 * random.random((num_weights, 1)) - 1
+            
+#         
+# 
+#         print('num weights in csv:', len(old_weights_dl[0]) )#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#         
+#         
+#         #if you have trained on a board this size before
+#         if num_weights == len(old_weights_dl[0])
+#             for w_num in range(num_weights):
+#                 weight = [float(old_weights_dl[0][str(w_num)])]
+#     #                 print('weight', weight)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#                 else:# if you are tying to train on a board you have not trained on before
+#                     weight = None    
+#             
+#                 
+#             
+#     
     except: # very first train session / no weights read
-        synaptic_weights = 2 * random.random((board_size['width'], 1)) - 1
+        synaptic_weights = 2 * random.random((num_weights, 1)) - 1
+        
+    print('num synaptic_weights', len(synaptic_weights))#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return  synaptic_weights
+
+
+
 
     
     
