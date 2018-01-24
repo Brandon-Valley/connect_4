@@ -126,7 +126,10 @@ def log_weights(new_weights):
  
     if need_overwrite == True:    
         print('overwriting old csv!!!!!!!!!!!!!!!!!!!!!!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
-        log_dl.append(new_weight_dict)
+        print('log_dl:', log_dl)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        for dict in log_dl:#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            print('length of dict to be logged:', len(dict))#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        log_dl.append(new_weights_dict)
         logger.logList(log_dl, weights_path, False)
     else:
         print('logging single!!!!!!!!!!!!!!!!!!')
