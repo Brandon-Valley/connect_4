@@ -7,7 +7,7 @@ import ai_funcs
 
 random.seed(1)
 
-DO_INTRO = True
+DO_INTRO = False
 
 
 if DO_INTRO == True:

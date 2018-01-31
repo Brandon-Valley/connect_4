@@ -12,7 +12,7 @@ import Board
 NUM_TIES_BEFORE_MUTATION = 2#change back to something like 100!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 full_path = os.path.realpath(__file__)
-weights_path =  os.path.dirname(full_path) + '\\synaptic_weights.csv'
+weights_path =  os.path.dirname(full_path) + '\\synaptic_weights'
 
 #not really random
 def get_rand_move(board):
@@ -93,50 +93,56 @@ def train_session(board_size, num_games, show_final_board):
         
     #say training is done and log the winning weights (player 1 = winner)
     print('Training done!')
-    log_weights(p1.bot.synaptic_weights)
-    print('Synaptic weights have been logged!')
+    log_weights(p1.bot.synaptic_weights, board_size)
+    print('synaptic weights have been logged!')
                
 
-def log_weights(new_weights):
+def log_weights(new_weights, board_size):
+    print('new weights:', new_weights)
     new_weights_dict = {}
-    need_overwrite = False
     
     #format newest weights
     for weight in new_weights:
-        new_weights_dict[len(new_weights_dict)] = weight[0]
+        new_weights_dict[len(new_weights_dict)] = str(weight[0])
+        print(type(weight[0]))
+        
+    print(new_weights_dict)
     
-    try:#if csv already exists
-        old_weights_dl = logger.readCSV(weights_path)
- 
-        #if the training session that was just preformed was on a board that yeilded more weights than any previous training session
-        if len(new_weights) > len(old_weights_dl[0]):
-            need_overwrite = True #if number of fieldnames changes, need to wverwrite csv
-            log_dl = []
-            #add Nones to all existing rows
-            for row_dict in old_weights_dl:
-                while(len(row_dict) < len(new_weights)):
-                    row_dict[len(row_dict)] = None
-                log_dl.append(row_dict)
-                
-        #add Nones to newest weights if needed
-        while(len(new_weights_dict) < len(old_weights_dl[0])):
-            new_weights_dict[len(new_weights_dict)] = None
-    except:
-        pass
- 
-    if need_overwrite == True:    
-        print('overwriting old csv!!!!!!!!!!!!!!!!!!!!!!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
-        print('log_dl:', log_dl)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for dict in log_dl:#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print('length of dict to be logged:', len(dict))#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        log_dl.append(new_weights_dict)
-        logger.logList(log_dl, weights_path, False)
-    else:
-        print('logging single!!!!!!!!!!!!!!!!!!')
-        logger.logSingle(new_weights_dict, weights_path)
+    #log
+    logger.logSingle(new_weights_dict, get_synaptic_weights(board_size))
+    
+#     try:#if csv already exists
+#         old_weights_dl = logger.readCSV(weights_path)
+#  
+#         #if the training session that was just preformed was on a board that yeilded more weights than any previous training session
+#         if len(new_weights) > len(old_weights_dl[0]):
+#             need_overwrite = True #if number of fieldnames changes, need to wverwrite csv
+#             log_dl = []
+#             #add Nones to all existing rows
+#             for row_dict in old_weights_dl:
+#                 while(len(row_dict) < len(new_weights)):
+#                     row_dict[len(row_dict)] = None
+#                 log_dl.append(row_dict)
+#                 
+#         #add Nones to newest weights if needed
+#         while(len(new_weights_dict) < len(old_weights_dl[0])):
+#             new_weights_dict[len(new_weights_dict)] = None
+#     except:
+#         pass
+#  
+#     if need_overwrite == True:    
+#         print('overwriting old csv!!!!!!!!!!!!!!!!!!!!!!')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+#         print('log_dl:', log_dl)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#         for dict in log_dl:#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#             print('length of dict to be logged:', len(dict))#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#         log_dl.append(new_weights_dict)
+#         logger.logList(log_dl, weights_path, False)
+#     else:
+#         print('logging single!!!!!!!!!!!!!!!!!!')
+#         logger.logSingle(new_weights_dict, weights_path)
 
 
-#each row of the synaptic weights csv represents a set of weights for a board single board size
+#if weights exist, reads them, if not, randomly generates some
 def get_synaptic_weights(board_size):
     num_digits_for_possable_moves = ( len( bin(board_size['width']) ) - 2 )# number of digits needed to express number of possable moves in binary
     num_chip_spaces = ( board_size['width'] * board_size['height'] ) #number of places a chip can be put on the board
@@ -144,50 +150,21 @@ def get_synaptic_weights(board_size):
     print('num_weights:', num_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     try:#if any old weights exist
-        old_weights_dl = logger.readCSV(weights_path)
-        synaptic_weights = []
-        weights_found = False
+        file_path = get_synaptic_weights_path(board_size)
+        old_weights_dl = logger.readCSV(file_path)
+        synaptic_weights = old_weights_dl[0]
+        print('synaptic_weights:', synaptic_weights)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
-        #check to see if you have existing weights for a board this size
-        for board_weights in old_weights_dl:
-            #if have existing weights for a board of this size 
-            if len(board_weights) == num_weights:
-                for w_num in range(num_weights):
-                    weight = [float(board_weights[str(w_num)])]
-                    if weight != None:
-                        synaptic_weights.append(weight)
-                weights_found = True
-                break
-        #if no weights found for board size, generate random weights
-        if weights_found == False:
-            synaptic_weights = 2 * random.random((num_weights, 1)) - 1
-            
-#         
-# 
-#         print('num weights in csv:', len(old_weights_dl[0]) )#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#         
-#         
-#         #if you have trained on a board this size before
-#         if num_weights == len(old_weights_dl[0])
-#             for w_num in range(num_weights):
-#                 weight = [float(old_weights_dl[0][str(w_num)])]
-#     #                 print('weight', weight)#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#                 else:# if you are tying to train on a board you have not trained on before
-#                     weight = None    
-#             
-#                 
-#             
-#     
     except: # very first train session / no weights read
         synaptic_weights = 2 * random.random((num_weights, 1)) - 1
         
-    print('num synaptic_weights', len(synaptic_weights))#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return  synaptic_weights
 
 
 
-
-    
+def get_synaptic_weights_path(board_size):
+    filename = str(board_size['width']) + 'x' + str(board_size['height']) + '.csv'
+    return weights_path + '\\' + filename
     
     
     
